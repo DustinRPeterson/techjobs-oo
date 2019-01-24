@@ -1,5 +1,6 @@
 package org.launchcode.controllers;
 
+import org.launchcode.models.Employer;
 import org.launchcode.models.Job;
 import org.launchcode.models.JobFieldType;
 import org.launchcode.models.forms.JobForm;
@@ -50,7 +51,20 @@ public class JobController {
         // new Job and add it to the jobData data store. Then
         // redirect to the job detail view for the new Job.
 
-        return "";
+        if(errors.hasErrors()) {
+            return "new-job";
+        } else {
+
+            Job newJob = new Job(jobForm.getName(), jobData.getEmployers().findById(jobForm.getEmployerId()) , jobForm.getLocation(), jobForm.getPositionType(), jobForm.getCoreCompetency());
+            jobData.add(newJob);
+
+            int newJobId = newJob.getId();
+
+            model.addAttribute("id", newJobId);
+            return "redirect:/job?id=" + newJobId;
+        }
+
+        //return "";
 
     }
 }
